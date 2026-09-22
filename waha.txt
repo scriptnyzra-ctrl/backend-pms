@@ -1,0 +1,16 @@
+# 1. Pertama kali (install semua)
+bash install.sh
+
+# 2. Jalankan server
+bash start.sh dev    # development
+bash start.sh prod   # production
+
+# 3. Cek status semua service
+bash status.sh
+bash status.sh --fix   # auto-repair jika ada yang mati
+
+# 4. Kelola WAHA secara terpisah
+bash waha.sh start
+bash waha.sh logs 100
+bash waha.sh restart
+bash waha.sh reset   # hapus semua session & config

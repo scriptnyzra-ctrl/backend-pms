@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  pms-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pms-api-server
+    restart: unless-stopped
+    ports:
+      - "${PORT:-5000}:5000"
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+      - DATABASE_URI=${DATABASE_URI}
+      - LARK_APP_ID=${LARK_APP_ID}
+      - LARK_APP_SECRET=${LARK_APP_SECRET}
+      - INTERNAL_API_URL=${INTERNAL_API_URL}
+      - WAHA_SERVICE_URL=${WAHA_SERVICE_URL}
+      - BLITZ_GOOGLE_SHEET_URL=${BLITZ_GOOGLE_SHEET_URL}
+      - BLITZ_AUTO_SUBMIT=${BLITZ_AUTO_SUBMIT}
+      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+      - ADMINPANEL_STATUS=${ADMINPANEL_STATUS}
+      - ADMINMANAGE_STATUS=${ADMINMANAGE_STATUS}
+      - BLITZ_USERNAME=${BLITZ_USERNAME}
+      - BLITZ_PASSWORD=${BLITZ_PASSWORD}
+    env_file:
+      - .env
+    volumes:
+      - ./temp:/app/temp
+      - ./logs:/app/logs
+    networks:
+      - pms-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/chart/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  pms-network:
+    driver: bridge
+
+volumes:
+  temp-data:
+  logs-data:
