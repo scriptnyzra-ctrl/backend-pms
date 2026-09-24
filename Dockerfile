@@ -1,4 +1,4 @@
-FROM node:18-bullseye
+FROM node:20-bookworm
 
 # Install sistem dependencies + Python3
 RUN apt-get update && apt-get install -y \
@@ -45,7 +45,7 @@ RUN apt-get update && apt-get install -y \
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1
 
 # Upgrade pip
-RUN pip3 install --upgrade pip setuptools wheel
+RUN pip3 install --upgrade --break-system-packages pip setuptools wheel
 
 # Install Chrome
 RUN wget -q -O /tmp/chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
@@ -63,7 +63,7 @@ RUN npm install --omit=dev
 
 # Install Python dependencies
 COPY requirements.txt ./
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN pip3 install --no-cache-dir --break-system-packages -r requirements.txt
 
 # Copy semua source code
 COPY . .
